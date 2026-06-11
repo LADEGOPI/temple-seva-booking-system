@@ -35,27 +35,31 @@ Temple Seva Booking Application developed using AWS cloud services and Node.js.
 - package.json
 - package-lock.json
 
-## Screenshots
+## Project Screenshots
 
 ### Booking Page
+![Booking Page](https://github.com/LADEGOPI/temple-seva-booking-system/blob/main/BOOKING%20PAGE%20.png?raw=true)
 
-(Add Screenshot Here)
+### Queue System
+![Queue System](https://github.com/LADEGOPI/temple-seva-booking-system/blob/main/QUEUE%20.png?raw=true)
 
-### QR Ticket Download
-
-(Add Screenshot Here)
+### Download Ticket and QR Code
+![Download QR](https://github.com/LADEGOPI/temple-seva-booking-system/blob/main/DOWNLOAD%20AND%20QR.png?raw=true)
 
 ### DynamoDB Table
+![DynamoDB Table](https://github.com/LADEGOPI/temple-seva-booking-system/blob/main/dynamo%20table.png?raw=true)
 
-(Add Screenshot Here)
+### DynamoDB Explore Items
+![DynamoDB Explore Items](https://github.com/LADEGOPI/temple-seva-booking-system/blob/main/dynamo%20explore%20items%20.png?raw=true)
 
-### S3 Bucket
-
-(Add Screenshot Here)
+### IAM Role
+![IAM Role](https://github.com/LADEGOPI/temple-seva-booking-system/blob/main/Iam%20role%20.png?raw=true)
 
 ### RDS Database
+![RDS Database](https://github.com/LADEGOPI/temple-seva-booking-system/blob/main/RDS%20EVENTS%20.png?raw=true)
 
-(Add Screenshot Here)
+### Amazon S3 Bucket
+![S3 Bucket](https://github.com/LADEGOPI/temple-seva-booking-system/blob/main/S3%20BUCKET.png?raw=true)
 
 ## Author
 
