@@ -1,0 +1,24 @@
+{
+  "name": "templebooking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1065.0",
+    "@aws-sdk/lib-dynamodb": "^3.1065.0",
+    "aws-sdk": "^2.1693.0",
+    "body-parser": "^2.2.2",
+    "express": "^5.2.1",
+    "mysql2": "^3.22.5",
+    "nodemailer": "^8.0.11",
+    "qrcode": "^1.5.4"
+  }
+}

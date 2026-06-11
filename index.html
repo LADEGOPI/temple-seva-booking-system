@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Temple Seva Booking</title>
+<style>
+    body{ font-family:Arial,sans-serif; background:linear-gradient(to right,#fdf6ec,#fffaf0); margin:0; text-align:center; }
+    .top-section{ display:flex; justify-content:space-around; align-items:center; margin-top:20px; }
+    #namam{ width:320px; height:auto; }
+    .queue-box{ text-align:center; }
+    .circle{ width:220px; height:220px; border:12px solid orange; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:70px; font-weight:bold; background:white; box-shadow:0 0 20px rgba(0,0,0,.2); margin:auto; }
+    .datetime{ margin-top:15px; font-size:18px; font-weight:bold; }
+    #bookingScreen, #successScreen { display:none; padding-top:20px; }
+    .card{ background:white; width:450px; max-width:95%; margin:auto; padding:25px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,.2); }
+    input,select{ width:95%; padding:15px; margin:10px; font-size:18px; border-radius:8px; border:1px solid #ccc; }
+    button{ padding:15px; width:95%; background:orange; color:white; font-size:18px; font-weight:bold; border:none; border-radius:8px; cursor:pointer; }
+    button:hover{ background:#ff6600; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<audio id="bellSound"><source src="ringtone_1778160977778.mp3" type="audio/mpeg"></audio>
+<audio id="successSound"><source src="meldix-success-340660.mp3" type="audio/mpeg"></audio>
+
+<div id="queueScreen">
+    <div class="top-section">
+        <div class="namam-box"><img src="63254.png" id="namam"></div>
+        <div class="queue-box">
+            <div class="circle"><span id="timer">50</span></div>
+            <h2>Virtual Waiting Time</h2>
+            <div class="datetime">
+                <div id="currentDate"></div>
+                <div id="currentTime"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="bookingScreen">
+    <h2>Temple Seva Booking Portal</h2>
+    <input type="text" id="devoteeName" placeholder="Devotee Name">
+    <input type="text" id="mobile" placeholder="Mobile Number">
+    <input type="email" id="email" placeholder="Email Address">
+    
+    <select id="sevaName" onchange="updateAmount()">
+        <option value="Angapradakshina">Angapradakshina</option>
+        <option value="Kalyanam">Kalyanam</option>
+        <option value="Abhishekam">Abhishekam</option>
+        <option value="300 Special Darshanam">300 Special Darshanam</option>
+        <option value="500 Special Darshanam">500 Special Darshanam</option>
+    </select>
+    
+    <input type="date" id="sevaDate">
+    <h3 id="amount">Amount : Rs.500</h3>
+    <button onclick="bookNow()">BOOK NOW</button>
+</div>
+
+<div id="successScreen">
+    <div id="ticketArea" class="card">
+        <h2>Booking Receipt</h2>
+        <p><b>Booking ID :</b> <span id="bid"></span></p>
+        <p><b>Name :</b> <span id="bname"></span></p>
+        <p><b>Seva :</b> <span id="bseva"></span></p>
+        <p><b>Amount :</b> <span id="bamount"></span></p>
+        <p><b>Date :</b> <span id="bdate"></span></p>
+        <h3>QR Ticket</h3>
+        <img id="qrImage" width="200" src="" crossorigin="anonymous" style="display:block;">
+    </div>
+    <br>
+    <button style="width:300px;" onclick="downloadPDF()">Download PDF Ticket</button>
+</div>
+
+<script>
+    // Date & Time
+    function updateDateTime(){
+        const now = new Date();
+        document.getElementById("currentDate").innerHTML = "Date : " + now.toLocaleDateString('en-GB');
+        document.getElementById("currentTime").innerHTML = "Time : " + now.toLocaleTimeString();
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // Amount Calculation
+    function updateAmount() {
+        const seva = document.getElementById("sevaName").value;
+        const amount = (seva === "300 Special Darshanam") ? 300 : 500;
+        document.getElementById("amount").innerText = "Amount : Rs." + amount;
+    }
+
+    // Countdown
+    let time = 50;
+    const bell = document.getElementById("bellSound");
+    const countdown = setInterval(()=>{
+        document.getElementById("timer").innerText = time;
+        if(time <= 10 && time > 0) bell.play().catch(()=>{});
+        if(time === 0){
+            clearInterval(countdown);
+            document.getElementById("queueScreen").style.display = "none";
+            document.getElementById("bookingScreen").style.display = "block";
+        }
+        time--;
+    }, 1000);
+
+    // Book Now
+    async function bookNow(){
+        // ????? ???? (?? ?????? ?????????? ????)
+        const data = {
+            success: true,
+            booking: {
+                BookingID: "SVB-611331",
+                DevoteeName: document.getElementById("devoteeName").value,
+                SevaName: document.getElementById("sevaName").value,
+                BookingDate: document.getElementById("sevaDate").value,
+                Amount: document.getElementById("amount").innerText.replace("Amount : Rs.", ""),
+                QRUrl: "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SVB-611331"
+            }
+        };
+
+        if(data.success){
+            document.getElementById("bookingScreen").style.display = "none";
+            document.getElementById("successScreen").style.display = "block";
+            document.getElementById("successSound").play();
+            
+            document.getElementById("bid").innerText = data.booking.BookingID;
+            document.getElementById("bname").innerText = data.booking.DevoteeName;
+            document.getElementById("bseva").innerText = data.booking.SevaName;
+            document.getElementById("bdate").innerText = data.booking.BookingDate;
+            document.getElementById("bamount").innerText = "Rs." + data.booking.Amount;
+            document.getElementById("qrImage").src = data.booking.QRUrl;
+        }
+    }
+
+    // PDF Download
+    async function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const ticket = document.getElementById("ticketArea");
+        const canvas = await html2canvas(ticket, { scale: 2, useCORS: true });
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        pdf.addImage(imgData, "PNG", 10, 10, 190, 150);
+        pdf.save("Temple-Ticket.pdf");
+    }
+</script>
+</body>
+</html>
